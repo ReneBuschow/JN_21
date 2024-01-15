@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script>
+  <Context>Zen26</Context>
+  <Version>1.0</Version>
+  <Language>Python</Language>
+  <Text>from System.IO import File, Directory, FileInfo, Path
+
+
+##### Preamble this one will require images arranged in scenes!!!
+##### first use the write files function
+
+### specify the time point of interest 
+
+
+
+
+## Remove all open documents
+#Zen.Application.Documents.RemoveAll()
+
+
+### find folder in multichannel
+
+window = Zen.Windows.CreateWindow('Define input directory 1')
+window.AddFolderBrowser('infolder1','Directory')
+result = window.Show()
+path_one = result.GetValue('infolder1')
+files_one = Directory.GetFiles(path_one)
+
+### find folder in single Channel
+
+window = Zen.Windows.CreateWindow('Define input directory 2')
+window.AddFolderBrowser('infolder2','Directory')
+result = window.Show()
+path_two = result.GetValue('infolder2')
+files_two = Directory.GetFiles(path_two)
+
+
+### find folder out
+
+window = Zen.Windows.CreateWindow('Define a output-directory')
+window.AddFolderBrowser('outfolder','Directory')
+result = window.Show()
+pathout = result.GetValue('outfolder')
+
+
+
+
+
+### loop though files_one
+
+
+for f in range(0, files_one.Length):
+    file = files_one[f]
+    file_info_one = FileInfo(file)
+    combo_one = Path.Combine(path_one, file_info_one.Name)
+    image_one = Zen.Application.LoadImage(combo_one, False)
+    file = files_two[f]
+    file_info_two = FileInfo(file)
+    combo_two = Path.Combine(path_two, file_info_two.Name)
+    image_two = Zen.Application.LoadImage(combo_two, False)
+
+    print(files_one[f])
+    print(files_two[f])
+    
+    image_fuse = Zen.Processing.Utilities.AddChannels(image_one,image_two)
+    Zen.Application.Save(image_fuse, Path.Combine(pathout,"Fuse_"+file_info_two.Name) , False)
+    Zen.Application.Documents.RemoveAll()
+
+    
+    
+    
+</Text>
+  <Author></Author>
+  <Description></Description>
+  <Keywords></Keywords>
+  <Row>62</Row>
+  <Column>42</Column>
+</Script>
